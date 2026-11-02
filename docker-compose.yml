@@ -5,7 +5,8 @@ services:
       args:
         GIT_REF: main
         BASE_URL: /
-    image: createai-microbit:latest
+        PXT_MICROBIT_REF: v9.0.12
+    image: createai-microbit:offline
     ports:
       - "8090:80"
     restart: unless-stopped
