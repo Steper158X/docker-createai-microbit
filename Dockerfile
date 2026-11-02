@@ -50,9 +50,13 @@ RUN npm run build \
 
 # ---------- Runtime ----------
 FROM nginx:1.27-alpine
+RUN apk add --no-cache openssl
 COPY nginx.conf /etc/nginx/conf.d/default.conf
+COPY docker/40-createai-tls.sh /docker-entrypoint.d/40-createai-tls.sh
+RUN sed -i 's/\r$//' /docker-entrypoint.d/40-createai-tls.sh \
+ && chmod +x /docker-entrypoint.d/40-createai-tls.sh
 COPY --from=app /app/dist /usr/share/nginx/html
 COPY --from=makecode /out/makecode /usr/share/nginx/html/makecode
 
-EXPOSE 80
+EXPOSE 80 443
 HEALTHCHECK --interval=30s --timeout=3s CMD wget -qO- http://127.0.0.1/healthz || exit 1

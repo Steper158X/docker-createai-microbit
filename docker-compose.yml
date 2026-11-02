@@ -7,6 +7,20 @@ services:
         BASE_URL: /
         PXT_MICROBIT_REF: v9.0.12
     image: createai-microbit:offline
+    container_name: createai
     ports:
       - "8090:80"
+      - "8443:443"
+    environment:
+      # Host IPs or names other machines use to open CreateAI over HTTPS
+      # (WebUSB / Web Bluetooth), comma separated, e.g. 192.168.1.10,createai.local
+      CREATEAI_TLS_HOSTS: ""
+    volumes:
+      # Generated local CA and server certificate, see README
+      - createai-tls:/tls
+      # Or use your own certificate (cert.pem + key.pem), e.g. from mkcert:
+      # - ./certs:/certs:ro
     restart: unless-stopped
+
+volumes:
+  createai-tls:
