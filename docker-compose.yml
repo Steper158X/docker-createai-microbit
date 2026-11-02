@@ -1,0 +1,11 @@
+services:
+  createai:
+    build:
+      context: .
+      args:
+        GIT_REF: main
+        BASE_URL: /
+    image: createai-microbit:latest
+    ports:
+      - "8090:80"
+    restart: unless-stopped
